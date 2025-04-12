@@ -12,7 +12,7 @@
 - **Номер группы: 353504**
 
 ## Диаграмма классов
-![Диаграмма классов](https://github.com/user-attachments/assets/1686f50d-16b9-457a-9f93-87e6e8d51658)
+![image](https://github.com/user-attachments/assets/9e3bb7cc-126c-4ae3-9117-aa980a4b44d2)
 
 ## Функции библиотеки
 
