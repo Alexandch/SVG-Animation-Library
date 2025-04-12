@@ -1,7 +1,7 @@
 # Библиотека для создания анимированных SVG
 
 ## Описание проекта
-Данная библиотека разработана для упрощения создания анимированных SVG-графиков. Она написана на чистом JavaScript и предоставляет разработчикам удобный API для создания и настройки анимаций SVG-элементов. Библиотека поддерживает:
+Данная библиотека разработана для упрощения создания анимированных SVG-графиков. Она написана на **TypeScript** и предоставляет разработчикам удобный API для создания и настройки анимаций SVG-элементов. Библиотека поддерживает:
 - Интеграцию с популярными фреймворками (React, Vue, Angular и др.) через npm.
 - Использование в качестве плагина для VS Code, упрощающего работу с анимациями в редакторе кода.
 
@@ -19,23 +19,34 @@
 1. **Создание анимированных SVG-элементов**
    - **Описание:** Позволяет создавать SVG-элементы (круги, линии, прямоугольники и т.д.) с заданными анимациями (перемещение, вращение, масштабирование).
    - **Пример использования:**
-     ```javascript
+     ```typescript
+     import { SVGAnimation } from 'animated-svg-lib';
      const svgLib = new SVGAnimation();
-     svgLib.createElement('circle', { cx: 50, cy: 50, r: 20 }).animate({ type: 'move', x: 100, duration: 1000 });
+     svgLib.createElement('circle', { cx: 50, cy: 50, r: 20 })
+     .animate({ type: 'move', x: 100, duration: 1000 });
 2. **Настройка анимаций**
    - **Описание:** Предоставляет API для настройки параметров анимации: длительность, задержка, тип перехода (easing), повторение и т.д.
    - **Пример использования:**
-     ```javascript
-     svgLib.animateElement('circle', { duration: 2000, delay: 500, easing: 'ease-in-out', repeat: true });
+     ```typescript
+     svgLib.animateElement('circle', {
+     duration: 2000,
+     delay: 500,
+     easing: 'ease-in-out',
+     repeat: true
+     });
 3. **Интеграция с фреймворками**
    - **Описание:** Библиотека публикуется как npm-пакет и поддерживает использование в проектах на React, Vue, Angular и других фреймворках.
    - **Пример использования(React):**
-     ```javascript
-     import SVGAnimation from 'svg-animation-library';
-     const AnimatedCircle = () => {
+     ```typescript
+     import { SVGAnimation } from 'animated-svg-lib';
+     import React from 'react';
+     const AnimatedCircle: React.FC = () => {
      const svg = new SVGAnimation();
-     svg.createElement('circle', { cx: 50, cy: 50, r: 20 }).animate({ type: 'rotate', duration: 1500 });
-     return svg.render();};
+     svg.createElement('circle', { cx: 50, cy: 50, r: 20 })
+     .animate({ type: 'rotate', duration: 1500 });
+     return <div dangerouslySetInnerHTML={{ __html: svg.render() }} />;
+     };
+     export default AnimatedCircle;
 4. **Плагин для VS Code**
    - **Описание:** Расширение для VS Code, которое добавляет автодополнение и предварительный просмотр анимаций прямо в редакторе.
    - **Пример использования:** После установки плагина в VS Code, при написании кода библиотеки появляется подсказка с параметрами анимации и визуальный предпросмотр.
@@ -43,7 +54,7 @@
 ## Модели данных
 
 **SVGElementModel**
- - **Описание:** Модель для представления SVG-элемента.
+ - **Описание:** Модель для представления SVG-элемента, определенная с использованием интерфейсов TypeScript.
  - **Атрибуты:**
   type — тип элемента (circle, rect, line и т.д.).
   attributes — объект с атрибутами элемента (например, { cx: 50, cy: 50, r: 20 } для круга).
