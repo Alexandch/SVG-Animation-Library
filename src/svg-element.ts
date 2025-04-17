@@ -1,10 +1,19 @@
 import { AnimationOptions } from './types';
 
-export class SVGElement {
+export class CustomSVGElement {
   protected tagName: string;
   protected attributes: Record<string, string>;
-  protected children: SVGElement[] = [];
+  protected children: CustomSVGElement[] = [];
 
+  public getChildren(): CustomSVGElement[] {
+    return this.children;
+  }
+  public addChild(child: CustomSVGElement): void {
+    this.children.push(child);
+  }
+  public getTagName(): string {
+    return this.tagName;
+  }
   constructor(tagName: string, attributes: Record<string, string | number> = {}) {
     this.tagName = tagName;
     this.attributes = {};
@@ -15,12 +24,12 @@ export class SVGElement {
     }
   }
 
-  add(child: SVGElement): this {
+  add(child: CustomSVGElement): this {
     this.children.push(child);
     return this;
   }
 
-  removeChild(child: SVGElement): this {
+  removeChild(child: CustomSVGElement): this {
     const index = this.children.indexOf(child);
     if (index !== -1) {
       this.children.splice(index, 1);
@@ -28,7 +37,7 @@ export class SVGElement {
     return this;
   }
 
-  animate(options: AnimationOptions): SVGElement {
+  animate(options: AnimationOptions): CustomSVGElement {
     throw new Error('Method "animate" must be implemented by subclasses or handled externally');
   }
 

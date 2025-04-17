@@ -7,14 +7,20 @@
   <style>
     #svgContainer {
       border: 1px solid black;
+      margin-top: 100px; /* Уменьшено для теста */
     }
     #svgContainer svg {
       display: block;
     }
+    .spacer {
+      height: 2000px; /* Spacer for scrolling */
+    }
   </style>
 </head>
 <body>
+  <div class="spacer"></div>
   <div id="svgContainer"></div>
+  <div class="spacer"></div>
 
   <script src="./dist/bundle.js"></script>
   <script>
@@ -22,42 +28,79 @@
     const { SVG } = AnimatedSVGLib;
     console.log('SVG class:', SVG);
 
-    const svg = new SVG({ width: 300, height: 300 });
+    const svg = new SVG({ width: 400, height: 400 });
     console.log('SVG instance:', svg);
 
-    const circle = svg.circle({ cx: 100, cy: 100, r: 20, fill: 'red' });
-    svg.animateChild(circle, {
-      attribute: 'r',
-      from: 20,
-      to: 40,
-      dur: '1s',
-      repeatCount: 'indefinite',
+    // Circle with phased timeline
+    const circle = svg.circle({ cx: 100, cy: 100, r: 20, fill: 'red', opacity: 1 });
+    svg.timeline({
+      element: circle,
+      phases: {
+        enter: {
+          r: {
+            from: 20,
+            to: 40,
+            dur: '1s',
+            easing: 'ease-in-out',
+          },
+          opacity: {
+            from: 0,
+            to: 1,
+            dur: '0.5s',
+          },
+        },
+        exit: {
+          r: {
+            from: 40,
+            to: 20,
+            dur: '1s',
+            easing: 'ease-in-out',
+          },
+          opacity: {
+            from: 1,
+            to: 0,
+            dur: '0.5s',
+          },
+        },
+      },
+      trigger: {
+        type: 'scroll',
+        target: '#svgContainer',
+        threshold: 0.5,
+      },
     });
-    console.log('Circle with animation:', circle);
 
+    // Rectangle with keyframes
     const rect = svg.rect({ x: 50, y: 50, width: 30, height: 30, fill: 'blue' });
     svg.animateChild(rect, {
       attribute: 'transform',
       type: 'rotate',
-      from: '0 65 65',
-      to: '360 65 65',
+      keyframes: [
+        { offset: 0, value: '0 65 65' },
+        { offset: 0.5, value: '180 65 65' },
+        { offset: 1, value: '360 65 65' },
+      ],
       dur: '2s',
       repeatCount: 'indefinite',
+      easing: 'linear',
     });
-    console.log('Rect with animation:', rect);
 
-    const line = svg.line({ x1: 50, y1: 150, x2: 150, y2: 150, stroke: 'green', 'stroke-width': 2 });
+    // Line with motion path
+    const motionPath = svg.path({ id: 'motionPath', d: 'M 50 150 Q 100 200 150 150', stroke: 'gray', 'stroke-width': 1, fill: 'none' });
+    const line = svg.line({ x1: 0, y1: 0, x2: 20, y2: 20, stroke: 'green', 'stroke-width': 2 });
     svg.animateChild(line, {
-      attribute: 'transform',
-      type: 'translate',
-      from: '0 0',
-      to: '50 0',
+      motionPath: {
+        path: 'motionPath',
+        align: true,
+        rotate: 'auto',
+      },
       dur: '1.5s',
       repeatCount: 'indefinite',
       begin: '0.5s',
+      easing: 'ease-out',
     });
-    console.log('Line with animation:', line);
 
+    // Path with scaling
     const path = svg.path({ d: 'M 200 100 Q 250 50 300 100', stroke: 'purple', 'stroke-width': 2, fill: 'none' });
     svg.animateChild(path, {
       attribute: 'transform',
@@ -68,27 +111,21 @@
       repeatCount: 'indefinite',
       begin: '1s',
     });
-    console.log('Path with animation:', path);
 
     const svgMarkup = svg.toString();
     console.log('Generated SVG markup:', svgMarkup);
 
     const svgContainer = document.getElementById('svgContainer');
-    const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgElement.innerHTML = svgMarkup;
-    svgContainer.appendChild(svgElement.firstChild);
+    svgContainer.innerHTML = svgMarkup; 
 
     console.log('SVG container innerHTML:', svgContainer.innerHTML);
 
-    // Удалим прямоугольник через 5 секунд
+    // Remove rectangle after 5 seconds
     setTimeout(() => {
       svg.removeChild(rect);
       const updatedMarkup = svg.toString();
       console.log('Updated SVG markup after removing rect:', updatedMarkup);
-      svgContainer.innerHTML = '';
-      const newSvgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      newSvgElement.innerHTML = updatedMarkup;
-      svgContainer.appendChild(newSvgElement.firstChild);
+      svgContainer.innerHTML = updatedMarkup;
     }, 5000);
   </script>
 </body>

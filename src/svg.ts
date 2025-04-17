@@ -1,9 +1,14 @@
 import { SVGElement, Circle, Rect, Line, Path } from './elements';
-import { AnimationOptions, createAnimation } from './animations';
+import { AnimationOptions } from './types';
+import { createAnimation } from './animations';
+import { Timeline, AnimationGroupOptions } from './timeline';
 
 export class SVG extends SVGElement {
+  private timelineInstance: Timeline;
+
   constructor(attributes: Record<string, string | number>) {
     super('svg', attributes);
+    this.timelineInstance = new Timeline();
   }
 
   circle(attributes: Record<string, string | number>): Circle {
@@ -40,5 +45,13 @@ export class SVG extends SVGElement {
     const animation = createAnimation(options);
     element.add(animation);
     return animation;
+  }
+
+  timeline(options: AnimationGroupOptions) {
+    return this.timelineInstance.addGroup(options);
+  }
+
+  stopAnimations() {
+    this.timelineInstance.stopAll();
   }
 }

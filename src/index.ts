@@ -1,8 +1,10 @@
 export { SVG } from './svg';
-export { SVGElement } from './svg-element';
+export { CustomSVGElement as SVGElement } from './svg-element';
 export { Circle, Rect, Line, Path } from './elements';
-export { Animate, AnimateTransform } from './animations';
-export { AnimationOptions } from './types';
+export { Animate, AnimateTransform, AnimateMotion } from './animations';
+export { AnimationOptions, Keyframe, MotionPath } from './types';
+export { useSvgAnimation } from './react-adapter';
+export { Timeline, AnimationGroup } from './timeline';
 
 console.log('Index.ts loaded');
 console.log('AnimatedSVGLib should be available now');

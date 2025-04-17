@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React SVG Animation Example</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.2/babel.min.js"></script>
+</head>
+<body>
+  <div id="root" class="p-4"></div>
+
+  <script src="./dist/bundle.js"></script>
+  <script type="text/babel">
+    const { useSvgAnimation } = AnimatedSVGLib;
+
+    function App() {
+      const svgRef = React.useRef(null);
+
+      useSvgAnimation(svgRef, {
+        width: 400,
+        height: 400,
+        elements: [
+          {
+            type: 'circle',
+            attributes: { cx: 100, cy: 100, r: 20, fill: 'red' },
+            animations: [
+              {
+                attribute: 'r',
+                from: 20,
+                to: 40,
+                dur: '1s',
+                repeatCount: 'indefinite',
+                easing: 'ease-in-out',
+              },
+            ],
+          },
+          {
+            type: 'rect',
+            attributes: { x: 50, y: 50, width: 30, height: 30, fill: 'blue' },
+            animations: [
+              {
+                attribute: 'transform',
+                type: 'rotate',
+                keyframes: [
+                  { offset: 0, value: '0 65 65' },
+                  { offset: 0.5, value: '180 65 65' },
+                  { offset: 1, value: '360 65 65' },
+                ],
+                dur: '2s',
+                repeatCount: 'indefinite',
+                easing: 'linear',
+              },
+            ],
+          },
+        ],
+      });
+
+      return (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">React SVG Animation Example</h1>
+          <svg ref={svgRef} />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

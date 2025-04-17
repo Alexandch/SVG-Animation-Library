@@ -1,19 +1,19 @@
-import { SVGElement } from './svg-element';
+import { CustomSVGElement } from './svg-element';
 import { AnimationOptions } from './types';
-export declare class Circle extends SVGElement {
+export declare class Circle extends CustomSVGElement {
     constructor(attributes: Record<string, string | number>);
-    animate(options: AnimationOptions): SVGElement;
+    animate(options: AnimationOptions): CustomSVGElement;
 }
-export declare class Rect extends SVGElement {
+export declare class Rect extends CustomSVGElement {
     constructor(attributes: Record<string, string | number>);
-    animate(options: AnimationOptions): SVGElement;
+    animate(options: AnimationOptions): CustomSVGElement;
 }
-export declare class Line extends SVGElement {
+export declare class Line extends CustomSVGElement {
     constructor(attributes: Record<string, string | number>);
-    animate(options: AnimationOptions): SVGElement;
+    animate(options: AnimationOptions): CustomSVGElement;
 }
-export declare class Path extends SVGElement {
+export declare class Path extends CustomSVGElement {
     constructor(attributes: Record<string, string | number>);
-    animate(options: AnimationOptions): SVGElement;
+    animate(options: AnimationOptions): CustomSVGElement;
 }
-export { SVGElement };
+export { CustomSVGElement as SVGElement };

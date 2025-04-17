@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index.ts', // Your entry file
   module: {
     rules: [
       {
@@ -20,5 +20,9 @@ module.exports = {
     library: 'AnimatedSVGLib',
     libraryTarget: 'umd',
     globalObject: 'this',
+  },
+  externals: {
+    react: 'React',       
+    'react-dom': 'ReactDOM', 
   },
 };
