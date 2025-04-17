@@ -5,6 +5,3 @@ export { Animate, AnimateTransform, AnimateMotion } from './animations';
 export { AnimationOptions, Keyframe, MotionPath } from './types';
 export { useSvgAnimation } from './react-adapter';
 export { Timeline, AnimationGroup } from './timeline';
-
-console.log('Index.ts loaded');
-console.log('AnimatedSVGLib should be available now');
