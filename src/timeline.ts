@@ -93,9 +93,13 @@ export class AnimationGroup {
 
   public stop() {
     const children = this.element.getChildren();
-    children.filter((child: CustomSVGElement) => 
-      !(child instanceof CustomSVGElement && ['animate', 'animateTransform', 'animateMotion'].includes(child.getTagName()))
-    );
+    const animationTags = ['animate', 'animateTransform', 'animateMotion'];
+    // Удаляем все анимационные элементы
+    children.forEach((child: CustomSVGElement) => {
+      if (child instanceof CustomSVGElement && animationTags.includes(child.getTagName())) {
+        this.element.removeChild(child);
+      }
+    });
   }
 }
 

@@ -10,4 +10,5 @@ export default {
     coverageDirectory: 'coverage',
     collectCoverage: true,
     collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/__tests__/**/*'],
+    setupFilesAfterEnv: ['@testing-library/jest-dom'],
   };

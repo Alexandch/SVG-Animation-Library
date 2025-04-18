@@ -28,13 +28,13 @@ describe('Animations', () => {
   test('creates an AnimateMotion animation', () => {
     const circle = svg.circle({ cx: 50, cy: 50, r: 20 });
     svg.animateChild(circle, {
-      attribute: 'motion',
-      motionPath: { path: 'M10,10 L100,100' }, // Убрали dur из motionPath
-      dur: '3s', // Переместили dur на уровень AnimationOptions
+      motionPath: { path: 'M10,10 L100,100' },
+      dur: '3s',
+      attribute: ''
     });
     const markup = svg.toString();
     expect(markup).toContain('<animateMotion');
-    expect(markup).toContain('path="M10,10 L100,100"');
+    expect(markup).toContain('<mpath xlink:href="#M10,10 L100,100"></mpath>');
     expect(markup).toContain('dur="3s"');
   });
 });

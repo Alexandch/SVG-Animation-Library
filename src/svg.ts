@@ -4,6 +4,9 @@ import { createAnimation } from './animations';
 import { Timeline, AnimationGroupOptions } from './timeline';
 
 export class SVG extends SVGElement {
+  groupedTimeline(arg0: ({ element: Circle; phases: { enter: { r: { from: number; to: number; dur: string; }; }; }; } | { element: Circle; phases: { exit: { r: { from: number; to: number; dur: string; }; }; }; })[]) {
+    throw new Error('Method not implemented.');
+  }
   private timelineInstance: Timeline;
 
   constructor(attributes: Record<string, string | number>) {
