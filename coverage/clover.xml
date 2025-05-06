@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1744962979613" clover="3.2.0">
-  <project timestamp="1744962979613" name="All files">
-    <metrics statements="188" coveredstatements="120" conditionals="99" coveredconditionals="38" methods="68" coveredmethods="39" elements="355" coveredelements="197" complexity="0" loc="188" ncloc="188" packages="1" files="7" classes="7"/>
+<coverage generated="1746512369169" clover="3.2.0">
+  <project timestamp="1746512369169" name="All files">
+    <metrics statements="189" coveredstatements="120" conditionals="99" coveredconditionals="38" methods="69" coveredmethods="39" elements="357" coveredelements="197" complexity="0" loc="189" ncloc="189" packages="1" files="7" classes="7"/>
     <file name="animations.ts" path="C:\Users\chues\OOP\SVG-Animation-Library\src\animations.ts">
       <metrics statements="43" coveredstatements="28" conditionals="55" coveredconditionals="29" methods="9" coveredmethods="4"/>
       <line num="1" count="5" type="stmt"/>
@@ -130,33 +130,34 @@
       <line num="50" count="28" type="stmt"/>
     </file>
     <file name="svg.ts" path="C:\Users\chues\OOP\SVG-Animation-Library\src\svg.ts">
-      <metrics statements="26" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="6"/>
+      <metrics statements="27" coveredstatements="21" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="6"/>
       <line num="1" count="5" type="stmt"/>
       <line num="3" count="5" type="stmt"/>
       <line num="4" count="5" type="stmt"/>
       <line num="6" count="5" type="stmt"/>
-      <line num="10" count="13" type="stmt"/>
-      <line num="11" count="13" type="stmt"/>
-      <line num="15" count="8" type="stmt"/>
-      <line num="16" count="8" type="stmt"/>
-      <line num="17" count="8" type="stmt"/>
-      <line num="21" count="3" type="stmt"/>
-      <line num="22" count="3" type="stmt"/>
-      <line num="23" count="3" type="stmt"/>
-      <line num="27" count="2" type="stmt"/>
-      <line num="28" count="2" type="stmt"/>
-      <line num="29" count="2" type="stmt"/>
-      <line num="33" count="2" type="stmt"/>
-      <line num="34" count="2" type="stmt"/>
-      <line num="35" count="2" type="stmt"/>
-      <line num="39" count="0" type="stmt"/>
-      <line num="40" count="0" type="stmt"/>
-      <line num="41" count="0" type="stmt"/>
-      <line num="45" count="4" type="stmt"/>
-      <line num="46" count="4" type="stmt"/>
-      <line num="47" count="4" type="stmt"/>
-      <line num="51" count="0" type="stmt"/>
-      <line num="55" count="0" type="stmt"/>
+      <line num="8" count="0" type="stmt"/>
+      <line num="13" count="13" type="stmt"/>
+      <line num="14" count="13" type="stmt"/>
+      <line num="18" count="8" type="stmt"/>
+      <line num="19" count="8" type="stmt"/>
+      <line num="20" count="8" type="stmt"/>
+      <line num="24" count="3" type="stmt"/>
+      <line num="25" count="3" type="stmt"/>
+      <line num="26" count="3" type="stmt"/>
+      <line num="30" count="2" type="stmt"/>
+      <line num="31" count="2" type="stmt"/>
+      <line num="32" count="2" type="stmt"/>
+      <line num="36" count="2" type="stmt"/>
+      <line num="37" count="2" type="stmt"/>
+      <line num="38" count="2" type="stmt"/>
+      <line num="42" count="0" type="stmt"/>
+      <line num="43" count="0" type="stmt"/>
+      <line num="44" count="0" type="stmt"/>
+      <line num="48" count="4" type="stmt"/>
+      <line num="49" count="4" type="stmt"/>
+      <line num="50" count="4" type="stmt"/>
+      <line num="54" count="0" type="stmt"/>
+      <line num="58" count="0" type="stmt"/>
     </file>
     <file name="timeline.ts" path="C:\Users\chues\OOP\SVG-Animation-Library\src\timeline.ts">
       <metrics statements="50" coveredstatements="26" conditionals="31" coveredconditionals="5" methods="13" coveredmethods="9"/>

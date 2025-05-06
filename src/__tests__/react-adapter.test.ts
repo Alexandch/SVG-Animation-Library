@@ -18,7 +18,7 @@ describe('useSvgAnimation', () => {
       })
     );
 
-    expect(result.current).toBeNull(); // Проверяем, что возвращается null, так как ref.current не задан
+    expect(result.current).toBeNull(); 
   });
 
   test('should apply animation to SVG element', () => {
@@ -37,6 +37,6 @@ describe('useSvgAnimation', () => {
       })
     );
 
-    expect(result.current).toBeNull(); // В юнит-тесте ref.current = null, поэтому SVG не создаётся
+    expect(result.current).toBeNull(); 
   });
 });
