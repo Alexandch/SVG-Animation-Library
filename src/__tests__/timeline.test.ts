@@ -12,12 +12,14 @@ describe('Timeline', () => {
 
   test('creates an AnimationGroup with enter phase', () => {
     const group = new AnimationGroup({
-      element: circle,
+      elements: [circle],
       phases: {
         enter: {
           r: {
-            from: '20', to: '40', dur: '1s',
-            attribute: ''
+            attribute: 'r', // Указываем корректное значение
+            from: '20',
+            to: '40',
+            dur: '1s',
           },
         },
       },
@@ -34,30 +36,33 @@ describe('Timeline', () => {
     const timeline = new Timeline();
 
     const group1 = timeline.addGroup({
-      element: circle,
+      elements: [circle],
       phases: {
         enter: {
           r: {
-            from: '20', to: '40', dur: '1s',
-            attribute: ''
+            attribute: 'r', // Указываем корректное значение
+            from: '20',
+            to: '40',
+            dur: '1s',
           },
         },
       },
     });
 
     const group2 = timeline.addGroup({
-      element: circle,
+      elements: [circle],
       phases: {
         exit: {
           r: {
-            from: '40', to: '20', dur: '1s',
-            attribute: ''
+            attribute: 'r', // Указываем корректное значение
+            from: '40',
+            to: '20',
+            dur: '1s',
           },
         },
       },
     });
 
-    // Вручную вызываем фазу exit для второй группы
     (group2 as any).playPhase('exit');
 
     const markup = svg.toString();
@@ -73,12 +78,14 @@ describe('Timeline', () => {
     const timeline = new Timeline();
 
     timeline.addGroup({
-      element: circle,
+      elements: [circle],
       phases: {
         enter: {
           r: {
-            from: '20', to: '40', dur: '1s',
-            attribute: ''
+            attribute: 'r', // Указываем корректное значение
+            from: '20',
+            to: '40',
+            dur: '1s',
           },
         },
       },

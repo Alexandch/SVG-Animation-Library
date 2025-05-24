@@ -12,7 +12,111 @@
 - **Номер группы: 353504**
 
 ## Диаграмма классов
-![image](https://github.com/user-attachments/assets/9e3bb7cc-126c-4ae3-9117-aa980a4b44d2)
+## Диаграмма классов
+
+```mermaid
+classDiagram
+    class CustomSVGElement {
+        -tagName: string
+        -attributes: Record<string, string>
+        -children: CustomSVGElement[]
+        -element: SVGElement | null
+        -textContent: string | null
+        +getChildren() CustomSVGElement[]
+        +add(child: CustomSVGElement) this
+        +removeChild(child: CustomSVGElement) this
+        +getTagName() string
+        +setElement(element: SVGElement) void
+        +getElement() SVGElement | null
+        +setAttribute(key: string, value: string) void
+        +getAttribute(key: string) string | undefined
+        +setTextContent(content: string) void
+        +getTextContent() string | null
+        +toString() string
+    }
+
+    class SVG {
+        -timelineInstance: Timeline
+        +circle(attributes) Circle
+        +rect(attributes) Rect
+        +line(attributes) Line
+        +path(attributes) Path
+        +linearGradient(attributes) LinearGradient
+        +stop(attributes) Stop
+        +filter(attributes) Filter
+        +feGaussianBlur(attributes) FeGaussianBlur
+        +feTurbulence(attributes) FeTurbulence
+        +text(attributes, textContent) Text
+        +clipPath(attributes) ClipPath
+        +animate(options) CustomSVGElement
+        +animateChild(element, options) CustomSVGElement
+        +timeline(options) void
+        +stopAnimations() void
+    }
+
+    class Circle {
+        +animate(options) CustomSVGElement
+    }
+
+    class Rect {
+        +animate(options) CustomSVGElement
+    }
+
+    class Line {
+        +animate(options) CustomSVGElement
+    }
+
+    class Path {
+        +animate(options) CustomSVGElement
+    }
+
+    class LinearGradient {
+        +animate(options) CustomSVGElement
+    }
+
+    class Stop {
+        +animate(options) CustomSVGElement
+    }
+
+    class Filter {
+        +animate(options) CustomSVGElement
+    }
+
+    class FeGaussianBlur {
+        +animate(options) CustomSVGElement
+    }
+
+    class FeTurbulence {
+        +animate(options) CustomSVGElement
+    }
+
+    class Text {
+        +animate(options) CustomSVGElement
+    }
+
+    class ClipPath {
+        +animate(options) CustomSVGElement
+    }
+
+    class Timeline {
+        -groups: Map<string, AnimationGroup>
+        +addGroup(options) string
+        +stopAll() void
+    }
+
+    CustomSVGElement <|-- SVG
+    CustomSVGElement <|-- Circle
+    CustomSVGElement <|-- Rect
+    CustomSVGElement <|-- Line
+    CustomSVGElement <|-- Path
+    CustomSVGElement <|-- LinearGradient
+    CustomSVGElement <|-- Stop
+    CustomSVGElement <|-- Filter
+    CustomSVGElement <|-- FeGaussianBlur
+    CustomSVGElement <|-- FeTurbulence
+    CustomSVGElement <|-- Text
+    CustomSVGElement <|-- ClipPath
+    SVG --> Timeline : uses
 
 ## Функции библиотеки
 

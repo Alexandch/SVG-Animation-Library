@@ -41,4 +41,75 @@ export class Path extends CustomSVGElement {
   }
 }
 
+export class LinearGradient extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('linearGradient', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate LinearGradient elements');
+  }
+}
+
+export class Stop extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('stop', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate Stop elements');
+  }
+}
+
+export class Filter extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('filter', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate Filter elements');
+  }
+}
+
+export class FeGaussianBlur extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('feGaussianBlur', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate FeGaussianBlur elements');
+  }
+}
+
+export class Text extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>, textContent: string) {
+    super('text', attributes);
+    this.setTextContent(textContent);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate Text elements');
+  }
+}
+
+export class ClipPath extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('clipPath', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate ClipPath elements');
+  }
+}
+
+export class FeTurbulence extends CustomSVGElement {
+  constructor(attributes: Record<string, string | number>) {
+    super('feTurbulence', attributes);
+  }
+
+  animate(options: AnimationOptions): CustomSVGElement {
+    throw new Error('Use SVG.animateChild to animate FeTurbulence elements');
+  }
+}
+
 export { CustomSVGElement as SVGElement };

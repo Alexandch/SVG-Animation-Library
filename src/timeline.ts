@@ -1,33 +1,31 @@
 import { CustomSVGElement } from './svg-element';
-import { AnimationOptions } from './types';
-import { createAnimation } from './animations';
+import { AnimationConfig, TriggerOptions } from './types';
+import { createAnimation, releaseAnimation } from './animations';
 
 interface AnimationPhase {
-  [key: string]: AnimationOptions;
+  [key: string]: AnimationConfig;
 }
 
 export interface AnimationGroupOptions {
-  element: CustomSVGElement;
+  elements: CustomSVGElement | CustomSVGElement[];
   phases: {
     enter?: AnimationPhase;
     hold?: AnimationPhase;
     exit?: AnimationPhase;
   };
-  trigger?: {
-    type: 'scroll' | 'click';
-    target?: string; // Element ID or selector
-    threshold?: number; // For scroll (0 to 1)
-  };
+  trigger?: TriggerOptions;
 }
 
 export class AnimationGroup {
-  private element: CustomSVGElement;
+  private elements: CustomSVGElement[];
   private phases: AnimationGroupOptions['phases'];
   private trigger?: AnimationGroupOptions['trigger'];
   private currentPhase: 'enter' | 'hold' | 'exit' | null = null;
+  private isDragging: boolean = false;
+  private eventListeners: Array<{ target: EventTarget; type: string; listener: EventListener }> = [];
 
   constructor(options: AnimationGroupOptions) {
-    this.element = options.element;
+    this.elements = Array.isArray(options.elements) ? options.elements : [options.elements];
     this.phases = options.phases;
     this.trigger = options.trigger;
 
@@ -38,10 +36,90 @@ export class AnimationGroup {
     }
   }
 
+  private debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
+    return (...args: any[]) => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  }
+
   private setupTrigger() {
     if (!this.trigger) return;
 
-    if (this.trigger.type === 'scroll') {
+    const targets = this.elements.map(element => element.getElement());
+    const defaultTarget = this.trigger.target ? document.querySelector(this.trigger.target) : targets[0];
+
+    if (!defaultTarget) {
+      console.error('Trigger target not found');
+      return;
+    }
+
+    const addListener = (target: EventTarget, type: string, listener: EventListener) => {
+      target.addEventListener(type, listener);
+      this.eventListeners.push({ target, type, listener });
+    };
+
+    if (this.trigger.type === 'drag') {
+      let startX = 0;
+      let startY = 0;
+
+      const onMouseDown = (e: Event) => {
+        this.isDragging = true;
+        const event = e as MouseEvent;
+        startX = event.clientX;
+        startY = event.clientY;
+        if (this.currentPhase !== 'enter') {
+          this.playPhase('enter');
+        }
+      };
+
+      const onMouseMove = this.debounce((e: Event) => {
+        if (!this.isDragging) return;
+        const event = e as MouseEvent;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        this.elements.forEach(element => {
+          const currentTransform = element.getAttribute('transform') || '';
+          element.setAttribute('transform', `${currentTransform} translate(${dx}, ${dy})`);
+        });
+      }, 16);
+
+      const onMouseUp = (e: Event) => {
+        this.isDragging = false;
+        if (this.currentPhase !== 'exit') {
+          this.playPhase('exit');
+        }
+      };
+
+      addListener(defaultTarget, 'mousedown', onMouseDown);
+      addListener(window, 'mousemove', onMouseMove);
+      addListener(window, 'mouseup', onMouseUp);
+    } else if (this.trigger.type === 'doubleclick') {
+      const onDoubleClick = (e: Event) => {
+        if (this.currentPhase !== 'enter') {
+          this.playPhase('enter');
+        } else {
+          this.playPhase('exit');
+        }
+      };
+      addListener(defaultTarget, 'dblclick', onDoubleClick);
+    } else if (this.trigger.type === 'keydown') {
+      const key = this.trigger.key;
+      if (!key) return;
+
+      const onKeyDown = (e: Event) => {
+        const event = e as KeyboardEvent;
+        if (event.key === key) {
+          if (this.currentPhase !== 'enter') {
+            this.playPhase('enter');
+          } else {
+            this.playPhase('exit');
+          }
+        }
+      };
+      addListener(window, 'keydown', onKeyDown);
+    } else if (this.trigger.type === 'scroll') {
       const target = this.trigger.target ? document.querySelector(this.trigger.target) : window;
       if (!target) return;
 
@@ -67,10 +145,36 @@ export class AnimationGroup {
         observer.observe(target);
       }
     } else if (this.trigger.type === 'click') {
-      const target = this.trigger.target ? document.querySelector(this.trigger.target) : null;
-      if (!target) return;
+      defaultTarget.addEventListener('click', () => {
+        if (this.currentPhase !== 'enter') {
+          this.playPhase('enter');
+        } else {
+          this.playPhase('exit');
+        }
+      });
+    } else if (this.trigger.type === 'hover') {
+      defaultTarget.addEventListener('mouseenter', () => {
+        if (this.currentPhase !== 'enter') {
+          this.playPhase('enter');
+        }
+      });
+      defaultTarget.addEventListener('mouseleave', () => {
+        if (this.currentPhase !== 'exit') {
+          this.playPhase('exit');
+        }
+      });
+    } else if (this.trigger.type === 'timer') {
+      const delay = this.trigger.delay ?? 1000;
+      setTimeout(() => {
+        if (this.currentPhase !== 'enter') {
+          this.playPhase('enter');
+        }
+      }, delay);
+    } else if (this.trigger.type === 'custom') {
+      const event = this.trigger.event;
+      if (!event) return;
 
-      target.addEventListener('click', () => {
+      defaultTarget.addEventListener(event, () => {
         if (this.currentPhase !== 'enter') {
           this.playPhase('enter');
         } else {
@@ -85,21 +189,48 @@ export class AnimationGroup {
 
     this.currentPhase = phase;
     const phaseAnimations = this.phases[phase]!;
-    Object.entries(phaseAnimations).forEach(([key, options]) => {
-      const animation = createAnimation({ ...options, attribute: key });
-      this.element.add(animation);
+    this.elements.forEach(element => {
+      Object.entries(phaseAnimations).forEach(([key, config]) => {
+        if (!('type' in config) && !('gradientId' in config) && !('motionPath' in config)) {
+          (config as any).attribute = key;
+        }
+        const animation = createAnimation(config);
+        element.add(animation);
+        // Добавляем анимацию в DOM
+        if (element.getElement()) {
+          const animationElement = document.createElementNS('http://www.w3.org/2000/svg', animation.getTagName());
+          animation.setElement(animationElement);
+          element.getElement()!.appendChild(animationElement);
+          animation.getAttributeNames().forEach(attr => {
+            const value = animation.getAttribute(attr);
+            if (value !== undefined) {
+              animationElement.setAttribute(attr, value);
+            }
+          });
+        }
+      });
     });
   }
 
   public stop() {
-    const children = this.element.getChildren();
     const animationTags = ['animate', 'animateTransform', 'animateMotion'];
-    // Удаляем все анимационные элементы
-    children.forEach((child: CustomSVGElement) => {
-      if (child instanceof CustomSVGElement && animationTags.includes(child.getTagName())) {
-        this.element.removeChild(child);
-      }
+    this.elements.forEach(element => {
+      const children = element.getChildren();
+      children.forEach((child: CustomSVGElement) => {
+        if (child instanceof CustomSVGElement && animationTags.includes(child.getTagName())) {
+          element.removeChild(child);
+          releaseAnimation(child);
+        }
+      });
     });
+  }
+
+  public destroy() {
+    this.stop();
+    this.eventListeners.forEach(({ target, type, listener }) => {
+      target.removeEventListener(type, listener);
+    });
+    this.eventListeners = [];
   }
 }
 
@@ -114,5 +245,10 @@ export class Timeline {
 
   stopAll() {
     this.groups.forEach(group => group.stop());
+  }
+
+  destroy() {
+    this.groups.forEach(group => group.destroy());
+    this.groups = [];
   }
 }

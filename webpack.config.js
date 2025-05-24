@@ -1,21 +1,19 @@
 const path = require('path');
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 module.exports = {
-  entry: './src/index.ts', // Your entry file
+  mode: 'production', // Explicit mode for optimization
+  entry: './src/index.ts',
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/, // Support both .ts and .tsx
         use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js'], // Include .tsx for React
   },
   output: {
     filename: 'bundle.js',
@@ -25,10 +23,7 @@ module.exports = {
     globalObject: 'this',
   },
   externals: {
-    react: 'React',       
-    'react-dom': 'ReactDOM', 
-  },
-  experiments: {
-    outputModule: true, // Поддержка ESM в выходных файлах
+    react: 'React',
+    'react-dom': 'ReactDOM',
   },
 };

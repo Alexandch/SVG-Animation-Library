@@ -1,4 +1,4 @@
-import { SVG } from '../index';
+import { SVG, AnimationOptions } from '../index';
 
 describe('SVG Scene', () => {
   let svg: SVG;
@@ -17,9 +17,19 @@ describe('SVG Scene', () => {
 
   test('applies animations to multiple elements', () => {
     const circle = svg.circle({ cx: 50, cy: 50, r: 20 });
-    svg.animateChild(circle, { attribute: 'r', from: 20, to: 40, dur: '1s' });
+    svg.animateChild(circle, {
+      attribute: 'r',
+      from: 20,
+      to: 40,
+      dur: '1s'
+    });
     const rect = svg.rect({ x: 100, y: 100, width: 30, height: 30 });
-    svg.animateChild(rect, { attribute: 'transform', type: 'rotate', from: '0 115 115', to: '360 115 115', dur: '2s' });
+    svg.animateChild(rect, {
+      type: 'rotate',
+      from: '0 115 115',
+      to: '360 115 115',
+      dur: '2s'
+    });
     const markup = svg.toString();
     expect(markup).toContain('attributeName="r"');
     expect(markup).toContain('from="20"');

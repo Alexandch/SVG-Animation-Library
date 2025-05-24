@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Animated SVG Library</title>
+  <title>Test Animated SVG Library with Advanced Features</title>
   <style>
     #svgContainer {
       border: 1px solid black;
-      margin-top: 100px; /* Уменьшено для теста */
+      margin-top: 100px;
+      position: relative;
     }
     #svgContainer svg {
       display: block;
     }
     .spacer {
-      height: 2000px; /* Spacer for scrolling */
+      height: 2000px;
     }
   </style>
 </head>
@@ -22,72 +23,207 @@
   <div id="svgContainer"></div>
   <div class="spacer"></div>
 
+  <!-- Подключаем React и ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Подключаем бандл -->
   <script src="./dist/bundle.js"></script>
   <script>
-    console.log('AnimatedSVGLib:', AnimatedSVGLib);
-    const { SVG } = AnimatedSVGLib;
-    console.log('SVG class:', SVG);
+    const { SVG, Timeline } = AnimatedSVGLib;
 
-    const svg = new SVG({ width: 400, height: 400 });
-    console.log('SVG instance:', svg);
+    // Создаем SVG-контейнер
+    const svg = new SVG({ width: 800, height: 800 });
+    const container = document.getElementById('svgContainer');
+    const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setElement(svgElement);
+    container.appendChild(svgElement);
 
-    // Circle with phased timeline
-    const circle = svg.circle({ cx: 100, cy: 100, r: 20, fill: 'red', opacity: 1 });
-    svg.timeline({
-      element: circle,
-      phases: {
-        enter: {
-          r: {
-            from: 20,
-            to: 40,
-            dur: '1s',
-            easing: 'ease-in-out',
-          },
-          opacity: {
-            from: 0,
-            to: 1,
-            dur: '0.5s',
-          },
-        },
-        exit: {
-          r: {
-            from: 40,
-            to: 20,
-            dur: '1s',
-            easing: 'ease-in-out',
-          },
-          opacity: {
-            from: 1,
-            to: 0,
-            dur: '0.5s',
-          },
-        },
-      },
-      trigger: {
-        type: 'scroll',
-        target: '#svgContainer',
-        threshold: 0.5,
-      },
+    // Определения (для градиента, фильтра и clipPath)
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    svgElement.appendChild(defs);
+
+    // Градиент
+    const gradient = svg.linearGradient({ id: 'gradient', x1: '0%', y1: '0%', x2: '100%', y2: '0%' });
+    const gradientElement = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setElement(gradientElement);
+    defs.appendChild(gradientElement);
+
+    const stop1 = svg.stop({ offset: '0%', 'stop-color': 'red' });
+    const stop1Element = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setElement(stop1Element);
+    gradientElement.appendChild(stop1Element);
+
+    const stop2 = svg.stop({ offset: '100%', 'stop-color': 'blue' });
+    const stop2Element = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setElement(stop2Element);
+    gradientElement.appendChild(stop2Element);
+
+    // Фильтр (размытие)
+    const blurFilter = svg.filter({ id: 'blurFilter', x: '0%', y: '0%', width: '100%', height: '100%' });
+    const blurFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+    blurFilter.setElement(blurFilterElement);
+    defs.appendChild(blurFilterElement);
+
+    const blur = svg.feGaussianBlur({ in: 'SourceGraphic', stdDeviation: 0 });
+    const blurElement = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+    blur.setElement(blurElement);
+    blurFilterElement.appendChild(blurElement);
+
+    // Фильтр (шум с feTurbulence)
+    const noiseFilter = svg.filter({ id: 'noiseFilter', x: '0%', y: '0%', width: '100%', height: '100%' });
+    const noiseFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+    noiseFilter.setElement(noiseFilterElement);
+    defs.appendChild(noiseFilterElement);
+
+    const turbulence = svg.feTurbulence({ type: 'turbulence', baseFrequency: '0.05', numOctaves: '2', result: 'turbulence' });
+    const turbulenceElement = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence');
+    turbulence.setElement(turbulenceElement);
+    noiseFilterElement.appendChild(turbulenceElement);
+
+    const displacementMap = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');
+    displacementMap.setAttribute('in', 'SourceGraphic');
+    displacementMap.setAttribute('in2', 'turbulence');
+    displacementMap.setAttribute('scale', '50');
+    displacementMap.setAttribute('xChannelSelector', 'R');
+    displacementMap.setAttribute('yChannelSelector', 'G');
+    noiseFilterElement.appendChild(displacementMap);
+
+    // ClipPath
+    const clipPath = svg.clipPath({ id: 'clipCircle' });
+    const clipPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+    clipPath.setElement(clipPathElement);
+    defs.appendChild(clipPathElement);
+
+    const clipCircle = svg.circle({ cx: 200, cy: 200, r: 50 });
+    const clipCircleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    clipCircle.setElement(clipCircleElement);
+    clipPathElement.appendChild(clipCircleElement);
+
+    // Элементы
+
+    // Круг с градиентом (для API)
+    const apiCircle = svg.circle({ cx: 400, cy: 400, r: 50, fill: 'url(#gradient)', opacity: 1 });
+    const apiCircleElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    apiCircle.setElement(apiCircleElement);
+    svgElement.appendChild(apiCircleElement);
+
+    // Прямоугольник с фильтром (размытие)
+    const rect = svg.rect({ x: 50, y: 50, width: 50, height: 50, fill: 'blue', filter: 'url(#blurFilter)' });
+    const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setElement(rectElement);
+    svgElement.appendChild(rectElement);
+
+    // Прямоугольник с шумом (feTurbulence)
+    const noiseRect = svg.rect({ x: 150, y: 150, width: 100, height: 100, fill: 'purple', filter: 'url(#noiseFilter)' });
+    const noiseRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    noiseRect.setElement(noiseRectElement);
+    svgElement.appendChild(noiseRectElement);
+
+    // Путь для движения линии
+    const motionPath = svg.path({ id: 'motionPath', d: 'M 50 150 Q 100 200 150 150', stroke: 'gray', 'stroke-width': 1, fill: 'none' });
+    const motionPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    motionPath.setElement(motionPathElement);
+    svgElement.appendChild(motionPathElement);
+
+    // Линия
+    const line = svg.line({ x1: 0, y1: 0, x2: 20, y2: 20, stroke: 'green', 'stroke-width': 2 });
+    const lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setElement(lineElement);
+    svgElement.appendChild(lineElement);
+
+    // Путь с масштабированием
+    const path = svg.path({ d: 'M 200 100 Q 250 50 300 100', stroke: 'purple', 'stroke-width': 2, fill: 'none' });
+    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setElement(pathElement);
+    svgElement.appendChild(pathElement);
+
+    // Текст
+    const text = svg.text({ x: 300, y: 300, fill: 'black', 'font-size': 24 }, 'Hello SVG!');
+    const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setElement(textElement);
+    svgElement.appendChild(textElement);
+
+    // Прямоугольник с clipPath
+    const clippedRect = svg.rect({ x: 150, y: 150, width: 100, height: 100, fill: 'orange', 'clip-path': 'url(#clipCircle)' });
+    const clippedRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    clippedRect.setElement(clippedRectElement);
+    svgElement.appendChild(clippedRectElement);
+
+    // Анимации
+
+    // Анимация градиента
+    svg.animateChild(stop1, {
+      attribute: 'stop-color',
+      from: 'red',
+      to: 'green',
+      dur: '3s',
+      repeatCount: 'indefinite',
+    });
+    svg.animateChild(stop2, {
+      attribute: 'stop-color',
+      from: 'blue',
+      to: 'yellow',
+      dur: '3s',
+      repeatCount: 'indefinite',
     });
 
-    // Rectangle with keyframes
-    const rect = svg.rect({ x: 50, y: 50, width: 30, height: 30, fill: 'blue' });
-    svg.animateChild(rect, {
-      attribute: 'transform',
-      type: 'rotate',
-      keyframes: [
-        { offset: 0, value: '0 65 65' },
-        { offset: 0.5, value: '180 65 65' },
-        { offset: 1, value: '360 65 65' },
-      ],
+    // Анимация фильтра (размытие)
+    svg.animateChild(blur, {
+      attribute: 'stdDeviation',
+      from: 0,
+      to: 5,
       dur: '2s',
+      repeatCount: 'indefinite',
+      easing: 'ease-in-out',
+    });
+
+    // Анимация фильтра (шум)
+    svg.animateChild(turbulence, {
+      attribute: 'baseFrequency',
+      from: '0.05',
+      to: '0.1',
+      dur: '5s',
       repeatCount: 'indefinite',
       easing: 'linear',
     });
 
-    // Line with motion path
-    const motionPath = svg.path({ id: 'motionPath', d: 'M 50 150 Q 100 200 150 150', stroke: 'gray', 'stroke-width': 1, fill: 'none' });
-    const line = svg.line({ x1: 0, y1: 0, x2: 20, y2: 20, stroke: 'green', 'stroke-width': 2 });
+    // Анимация clipPath (изменение радиуса круга в clipPath)
+    svg.animateChild(clipCircle, {
+      attribute: 'r',
+      from: 50,
+      to: 100,
+      dur: '3s',
+      repeatCount: 'indefinite',
+      easing: 'ease-in-out',
+    });
+
+    // Анимация текста
+    svg.animateChild(text, {
+      attribute: 'x',
+      from: 300,
+      to: 400,
+      dur: '2s',
+      repeatCount: 'indefinite',
+      easing: 'ease-in-out',
+    });
+    svg.animateChild(text, {
+      attribute: 'fill',
+      from: 'black',
+      to: 'red',
+      dur: '3s',
+      repeatCount: 'indefinite',
+    });
+
+    // Прямоугольник: вращение
+    svg.animateChild(rect, {
+      type: 'rotate',
+      from: '0 75 75',
+      to: '360 75 75',
+      dur: '2s',
+      repeatCount: 'indefinite',
+    });
+
+    // Линия: движение по пути и изменение длины
     svg.animateChild(line, {
       motionPath: {
         path: 'motionPath',
@@ -96,37 +232,87 @@
       },
       dur: '1.5s',
       repeatCount: 'indefinite',
-      begin: '0.5s',
+      begin: '0s',
       easing: 'ease-out',
     });
+    svg.animateChild(line, {
+      attribute: 'x2',
+      from: 20,
+      to: 50,
+      dur: '2s',
+      repeatCount: 'indefinite',
+      easing: 'ease-in-out',
+    });
 
-    // Path with scaling
-    const path = svg.path({ d: 'M 200 100 Q 250 50 300 100', stroke: 'purple', 'stroke-width': 2, fill: 'none' });
+    // Путь: масштабирование
     svg.animateChild(path, {
-      attribute: 'transform',
       type: 'scale',
       from: '1 1',
       to: '1.5 1.5',
       dur: '1s',
       repeatCount: 'indefinite',
-      begin: '1s',
+      begin: '0s',
     });
 
-    const svgMarkup = svg.toString();
-    console.log('Generated SVG markup:', svgMarkup);
+    // Анимация на основе захардкоденных данных
+    try {
+      // Имитация данных API (длина "цитаты")
+      const data = { content: "This is a sample quote for testing animation purposes." };
+      const quoteLength = data.content.length; // Длина цитаты
+      const scaledRadius = 50 + quoteLength * 0.5; // Масштабируем радиус (50 + длина * 0.5)
+      svg.animateChild(apiCircle, {
+        attribute: 'r',
+        from: 50,
+        to: scaledRadius,
+        dur: '2s',
+        easing: 'ease-in-out',
+      });
 
-    const svgContainer = document.getElementById('svgContainer');
-    svgContainer.innerHTML = svgMarkup; 
+      // Опционально: Если использовать локальный JSON-файл, созд data.json с содержимым:
+      // { "content": "This is a sample quote for testing animation purposes." }
+      // И раскомментир следующий код:
+      /*
+      fetch('./data.json')
+        .then(res => res.json())
+        .then(data => {
+          const quoteLength = data.content.length;
+          const scaledRadius = 50 + quoteLength * 0.5;
+          svg.animateChild(apiCircle, {
+            attribute: 'r',
+            from: 50,
+            to: scaledRadius,
+            dur: '2s',
+            easing: 'ease-in-out',
+          });
+        })
+        .catch(err => {
+          console.error('Failed to fetch local data:', err);
+          svg.animateChild(apiCircle, {
+            attribute: 'r',
+            from: 50,
+            to: 50,
+            dur: '2s',
+            easing: 'ease-in-out',
+          });
+        });
+      */
+    } catch (err) {
+      console.error('Failed to process data:', err);
+      svg.animateChild(apiCircle, {
+        attribute: 'r',
+        from: 50,
+        to: 50,
+        dur: '2s',
+        easing: 'ease-in-out',
+      });
+    }
 
-    console.log('SVG container innerHTML:', svgContainer.innerHTML);
-
-    // Remove rectangle after 5 seconds
+    // Удаление прямоугольника через 5 секунд
     setTimeout(() => {
       svg.removeChild(rect);
-      const updatedMarkup = svg.toString();
-      console.log('Updated SVG markup after removing rect:', updatedMarkup);
-      svgContainer.innerHTML = updatedMarkup;
     }, 5000);
+
+    console.log('Generated SVG markup:', svg.toString());
   </script>
 </body>
 </html>

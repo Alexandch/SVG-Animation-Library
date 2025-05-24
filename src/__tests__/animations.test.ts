@@ -10,11 +10,10 @@ describe('Animations', () => {
   test('creates an AnimateTransform animation', () => {
     const circle = svg.circle({ cx: 50, cy: 50, r: 20 });
     svg.animateChild(circle, {
-      attribute: 'transform',
       type: 'rotate',
       from: '0 50 50',
       to: '360 50 50',
-      dur: '2s',
+      dur: '2s'
     });
     const markup = svg.toString();
     expect(markup).toContain('<animateTransform');
@@ -30,7 +29,7 @@ describe('Animations', () => {
     svg.animateChild(circle, {
       motionPath: { path: 'M10,10 L100,100' },
       dur: '3s',
-      attribute: ''
+      attribute: 'motion'
     });
     const markup = svg.toString();
     expect(markup).toContain('<animateMotion');

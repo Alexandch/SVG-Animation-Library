@@ -1,5 +1,7 @@
 import { CustomSVGElement } from './svg-element';
-import { AnimationOptions, Keyframe, MotionPath } from './types';
+import { AnimationConfig, AnimationOptions, TransformAnimationOptions, GradientAnimationOptions } from './types';
+
+const animationPool: CustomSVGElement[] = [];
 
 export class Animate extends CustomSVGElement {
   constructor(options: AnimationOptions) {
@@ -11,7 +13,6 @@ export class Animate extends CustomSVGElement {
       ...(options.easing && { calcMode: 'spline', keySplines: getKeySplines(options.easing) }),
     };
 
-    // Use keyframes if provided, otherwise fallback to from/to
     if (options.keyframes && options.keyframes.length > 0) {
       attributes.values = options.keyframes.map(kf => kf.value.toString()).join(';');
       attributes.keyTimes = options.keyframes.map(kf => kf.offset).join(';');
@@ -28,11 +29,11 @@ export class Animate extends CustomSVGElement {
 }
 
 export class AnimateTransform extends CustomSVGElement {
-  constructor(options: AnimationOptions) {
+  constructor(options: TransformAnimationOptions) {
     const attributes: Record<string, string> = {
       attributeName: 'transform',
-      type: options.type ?? 'rotate',
-      dur: options.dur,
+      type: options.type,
+      dur: options.dur || '1s',
       repeatCount: options.repeatCount || 'indefinite',
       ...(options.begin && { begin: options.begin }),
       ...(options.easing && { calcMode: 'spline', keySplines: getKeySplines(options.easing) }),
@@ -43,10 +44,10 @@ export class AnimateTransform extends CustomSVGElement {
       attributes.keyTimes = options.keyframes.map(kf => kf.offset).join(';');
     } else {
       if (options.from === undefined || options.to === undefined) {
-        throw new Error('AnimationOptions must have "from" and "to" properties if keyframes are not provided');
+        throw new Error('TransformAnimationOptions must have "from" and "to" properties if keyframes are not provided');
       }
-      attributes.from = options.from.toString();
-      attributes.to = options.to.toString();
+      attributes.from = Array.isArray(options.from) ? options.from.join(' ') : options.from.toString();
+      attributes.to = Array.isArray(options.to) ? options.to.join(' ') : options.to.toString();
     }
 
     super('animateTransform', attributes);
@@ -68,13 +69,34 @@ export class AnimateMotion extends CustomSVGElement {
       ...(options.motionPath.align !== undefined && { path: options.motionPath.path, rotate: options.motionPath.align ? 'auto' : '0' }),
     });
 
-    // Add the path as a child <mpath> element
     const mpath = new CustomSVGElement('mpath', { 'xlink:href': `#${options.motionPath.path}` });
     this.add(mpath);
   }
 }
 
-function getKeySplines(easing: AnimationOptions['easing']): string {
+export class AnimateGradient extends CustomSVGElement {
+  constructor(options: GradientAnimationOptions) {
+    const attributes: Record<string, string> = {
+      attributeName: options.attribute,
+      href: `#${options.gradientId} stop:nth-child(${options.stopIndex + 1})`,
+      dur: options.dur,
+      repeatCount: options.repeatCount || 'indefinite',
+      ...(options.begin && { begin: options.begin }),
+      ...(options.easing && { calcMode: 'spline', keySplines: getKeySplines(options.easing) }),
+    };
+
+    if (options.from === undefined || options.to === undefined) {
+      throw new Error('GradientAnimationOptions must have "from" and "to" properties');
+    }
+    attributes.from = options.from.toString();
+    attributes.to = options.to.toString();
+
+    super('animate', attributes);
+  }
+}
+
+function getKeySplines(easing: string | undefined): string {
+  if (!easing) return '0 0 1 1';
   switch (easing) {
     case 'ease-in':
       return '0.42 0 1 1';
@@ -90,23 +112,37 @@ function getKeySplines(easing: AnimationOptions['easing']): string {
   }
 }
 
-export function createAnimation(options: AnimationOptions): CustomSVGElement {
-  // Validation
-  if (!options.motionPath && !options.attribute) {
-    throw new Error('AnimationOptions must have an "attribute" property or "motionPath"');
+export function createAnimation(config: AnimationConfig): CustomSVGElement {
+  let animation: CustomSVGElement;
+  if (animationPool.length > 0) {
+    animation = animationPool.pop()!;
+    animation.clearAttributes();
+    animation.clearChildren();
+  } else {
+    if ('gradientId' in config) {
+      animation = new AnimateGradient(config as GradientAnimationOptions);
+    } else if ('type' in config) {
+      animation = new AnimateTransform(config as TransformAnimationOptions);
+    } else {
+      const options = config as AnimationOptions;
+      if (options.motionPath) {
+        animation = new AnimateMotion(options);
+      } else {
+        if (!options.attribute) {
+          throw new Error('AnimationOptions must have an "attribute" property');
+        }
+        if (!options.dur) {
+          throw new Error('AnimationOptions must have a "dur" property');
+        }
+        animation = new Animate(options);
+      }
+    }
   }
-  if (!options.dur) {
-    throw new Error('AnimationOptions must have a "dur" property');
-  }
-
-  // Handle different animation types
-  if (options.motionPath) {
-    return new AnimateMotion(options); // Assumes AnimateMotion class handles motionPath
-  }
-  if (options.attribute === 'transform') {
-    return new AnimateTransform(options);
-  }
-  return new Animate(options);
+  return animation;
 }
 
-export { AnimationOptions };
+export function releaseAnimation(anim: CustomSVGElement) {
+  anim.clearAttributes();
+  anim.clearChildren();
+  animationPool.push(anim);
+}

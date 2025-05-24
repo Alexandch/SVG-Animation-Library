@@ -1,6 +1,6 @@
 export { SVG } from './svg';
-export { SVGElement } from './svg-element';
-export { Circle, Rect } from './elements';
-export { Animate, AnimateTransform } from './animations';
-console.log('Index.ts loaded');
-console.log('AnimatedSVGLib should be available now');
+export { CustomSVGElement as SVGElement } from './svg-element';
+export { Circle, Rect, Line, Path } from './elements';
+export { Animate, AnimateTransform, AnimateMotion } from './animations';
+export { useSvgAnimation } from './react-adapter';
+export { Timeline, AnimationGroup } from './timeline';
