@@ -5,7 +5,7 @@ export class CustomSVGElement {
   protected attributes: Record<string, string>;
   protected children: CustomSVGElement[] = [];
   private element: SVGElement | null = null;
-  private textContent: string | null = null; // Добавляем поле для текстового содержимого
+  private textContent: string | null = null; 
 
   constructor(tagName: string, attributes: Record<string, string | number> = {}) {
     this.tagName = tagName;
@@ -58,7 +58,7 @@ export class CustomSVGElement {
       .map(([k, v]) => `${k}="${v}"`)
       .join(' ');
     const childrenStr = this.children.map(c => c.toString()).join('');
-    const textContentStr = this.textContent || ''; // Учитываем текстовое содержимое
+    const textContentStr = this.textContent || ''; 
     return `<${this.tagName} ${attrs}>${textContentStr}${childrenStr}</${this.tagName}>`;
   }
 
@@ -74,7 +74,7 @@ export class CustomSVGElement {
       }
     }
     if (this.textContent) {
-      element.textContent = this.textContent; // Синхронизируем textContent с DOM
+      element.textContent = this.textContent; 
     }
     this.children.forEach(child => {
       if (child.element) {
@@ -115,7 +115,6 @@ export class CustomSVGElement {
     }
   }
 
-  // Добавляем методы для работы с textContent
   public setTextContent(content: string): void {
     this.textContent = content;
     if (this.element) {

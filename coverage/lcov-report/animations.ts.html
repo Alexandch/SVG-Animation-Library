@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.81% </span>
+                <span class="strong">55.07% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>37/64</span>
+                <span class='fraction'>38/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.07% </span>
+                <span class="strong">43.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/65</span>
+                <span class='fraction'>31/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/9</span>
+                <span class='fraction'>5/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.65% </span>
+                <span class="strong">59.37% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>37/61</span>
+                <span class='fraction'>38/64</span>
             </div>
         
             
@@ -205,7 +205,12 @@
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -248,9 +253,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -382,17 +392,22 @@ export class AnimateTransform extends CustomSVGElement {
     const attributes: Record&lt;string, string&gt; = {
       attributeName: 'transform',
       type: options.type,
-      dur: options.dur,
+      dur: options.dur || <span class="branch-1 cbranch-no" title="branch not covered" >'1s',</span>
       repeatCount: options.repeatCount || 'indefinite',
       ...(options.begin &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{ begin: options.begin })</span>,
       ...(options.easing &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{ calcMode: 'spline', keySplines: getKeySplines(options.easing) })</span>,
     };
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (options.from === undefined || options.to === undefined) {
-<span class="cstat-no" title="statement not covered" >      throw new Error('TransformAnimationOptions must have "from" and "to" properties');</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (options.keyframes &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >options.keyframes.length &gt; 0)</span> {
+<span class="cstat-no" title="statement not covered" >      attributes.values = options.keyframes.map(<span class="fstat-no" title="function not covered" >kf </span>=&gt; <span class="cstat-no" title="statement not covered" >kf.value.toString())</span>.join(';');</span>
+<span class="cstat-no" title="statement not covered" >      attributes.keyTimes = options.keyframes.map(<span class="fstat-no" title="function not covered" >kf </span>=&gt; <span class="cstat-no" title="statement not covered" >kf.offset)</span>.join(';');</span>
+    } else {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (options.from === undefined || options.to === undefined) {
+<span class="cstat-no" title="statement not covered" >        throw new Error('TransformAnimationOptions must have "from" and "to" properties if keyframes are not provided');</span>
+      }
+      attributes.from = Array.isArray(options.from) ? <span class="branch-0 cbranch-no" title="branch not covered" >options.from.join(' ') </span>: options.from.toString();
+      attributes.to = Array.isArray(options.to) ? <span class="branch-0 cbranch-no" title="branch not covered" >options.to.join(' ') </span>: options.to.toString();
     }
-    attributes.from = Array.isArray(options.from) ? <span class="branch-0 cbranch-no" title="branch not covered" >options.from.join(' ') </span>: options.from.toString();
-    attributes.to = Array.isArray(options.to) ? <span class="branch-0 cbranch-no" title="branch not covered" >options.to.join(' ') </span>: options.to.toString();
 &nbsp;
     super('animateTransform', attributes);
   }
@@ -460,8 +475,8 @@ export function createAnimation(config: AnimationConfig): CustomSVGElement {
   let animation: CustomSVGElement;
   <span class="missing-if-branch" title="if path not taken" >I</span>if (animationPool.length &gt; 0) {
 <span class="cstat-no" title="statement not covered" >    animation = animationPool.pop()!;</span>
-<span class="cstat-no" title="statement not covered" >    animation.clearAttributes(); </span>// Используем публичный метод
-<span class="cstat-no" title="statement not covered" >    animation.clearChildren(); </span>// Используем публичный метод
+<span class="cstat-no" title="statement not covered" >    animation.clearAttributes();</span>
+<span class="cstat-no" title="statement not covered" >    animation.clearChildren();</span>
   } else {
     <span class="missing-if-branch" title="if path not taken" >I</span>if ('gradientId' in config) {
 <span class="cstat-no" title="statement not covered" >      animation = new AnimateGradient(config as GradientAnimationOptions);</span>
@@ -486,8 +501,8 @@ export function createAnimation(config: AnimationConfig): CustomSVGElement {
 }
 &nbsp;
 export function releaseAnimation(anim: CustomSVGElement) {
-  anim.clearAttributes(); // Используем публичный метод
-  anim.clearChildren(); // Используем публичный метод
+  anim.clearAttributes();
+  anim.clearChildren();
   animationPool.push(anim);
 }</pre></td></tr></table></pre>
 
@@ -496,7 +511,7 @@ export function releaseAnimation(anim: CustomSVGElement) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-17T12:45:14.004Z
+                at 2025-05-28T06:32:40.630Z
             </div>
         <script src="prettify.js"></script>
         <script>

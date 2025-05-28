@@ -2,7 +2,7 @@ export class CustomSVGElement {
     constructor(tagName, attributes = {}) {
         this.children = [];
         this.element = null;
-        this.textContent = null; // Добавляем поле для текстового содержимого
+        this.textContent = null;
         this.tagName = tagName;
         this.attributes = {};
         for (const [key, value] of Object.entries(attributes)) {
@@ -46,7 +46,7 @@ export class CustomSVGElement {
             .map(([k, v]) => `${k}="${v}"`)
             .join(' ');
         const childrenStr = this.children.map(c => c.toString()).join('');
-        const textContentStr = this.textContent || ''; // Учитываем текстовое содержимое
+        const textContentStr = this.textContent || '';
         return `<${this.tagName} ${attrs}>${textContentStr}${childrenStr}</${this.tagName}>`;
     }
     getElement() {
@@ -60,7 +60,7 @@ export class CustomSVGElement {
             }
         }
         if (this.textContent) {
-            element.textContent = this.textContent; // Синхронизируем textContent с DOM
+            element.textContent = this.textContent;
         }
         this.children.forEach(child => {
             if (child.element) {
@@ -95,7 +95,6 @@ export class CustomSVGElement {
             }
         }
     }
-    // Добавляем методы для работы с textContent
     setTextContent(content) {
         this.textContent = content;
         if (this.element) {

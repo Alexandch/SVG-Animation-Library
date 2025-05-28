@@ -27,7 +27,7 @@ export interface GradientAnimationOptions extends BaseAnimationOptions {
 }
 
 export interface FilterAnimationOptions extends BaseAnimationOptions {
-  attribute: 'stdDeviation' | 'baseFrequency' | 'numOctaves'; // Добавляем атрибуты для фильтров
+  attribute: 'stdDeviation' | 'baseFrequency' | 'numOctaves'; 
 }
 
 export type AnimationConfig = AnimationOptions | TransformAnimationOptions | GradientAnimationOptions | FilterAnimationOptions;

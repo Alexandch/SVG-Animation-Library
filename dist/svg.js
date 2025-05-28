@@ -225,14 +225,14 @@ export class SVG extends CustomSVGElement {
         this.timelineInstance.stopAll();
     }
     setElement(element) {
-        super.setElement(element); // Используем метод родителя
+        super.setElement(element);
         if (this.getTextContent()) {
-            element.textContent = this.getTextContent(); // Используем публичный метод
+            element.textContent = this.getTextContent();
         }
         this.getChildren().forEach(child => {
             const childElement = child.getElement();
             if (childElement) {
-                element.appendChild(childElement); // Проверяем на null
+                element.appendChild(childElement);
             }
         });
     }

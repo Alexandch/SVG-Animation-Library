@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">24.3% </span>
+                <span class="strong">23.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>35/144</span>
+                <span class='fraction'>36/152</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.08% </span>
+                <span class="strong">13.69% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/71</span>
+                <span class='fraction'>10/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.35% </span>
+                <span class="strong">31.42% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/34</span>
+                <span class='fraction'>11/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">24.81% </span>
+                <span class="strong">24.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/133</span>
+                <span class='fraction'>34/141</span>
             </div>
         
             
@@ -304,7 +304,19 @@
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -502,6 +514,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -547,7 +571,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CustomSVGElement } from './svg-element';
 import { AnimationConfig, TriggerOptions } from './types';
-import { createAnimation, releaseAnimation } from './animations'; 
+import { createAnimation, releaseAnimation } from './animations';
 &nbsp;
 interface AnimationPhase {
   [key: string]: AnimationConfig;
@@ -611,9 +635,9 @@ export class AnimationGroup {
       let startX = <span class="cstat-no" title="statement not covered" >0;</span>
       let startY = <span class="cstat-no" title="statement not covered" >0;</span>
 &nbsp;
-      const onMouseDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; { // Изменяем на Event</span>
+      const onMouseDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this.isDragging = true;</span>
-        const event = <span class="cstat-no" title="statement not covered" >e as MouseEvent;</span> // Приводим к MouseEvent при необходимости
+        const event = <span class="cstat-no" title="statement not covered" >e as MouseEvent;</span>
 <span class="cstat-no" title="statement not covered" >        startX = event.clientX;</span>
 <span class="cstat-no" title="statement not covered" >        startY = event.clientY;</span>
 <span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (this.currentPhase !== 'enter') {</span>
@@ -621,9 +645,9 @@ export class AnimationGroup {
         }
       };
 &nbsp;
-      const onMouseMove = <span class="cstat-no" title="statement not covered" >this.debounce(<span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; { // Изменяем на Event</span>
+      const onMouseMove = <span class="cstat-no" title="statement not covered" >this.debounce(<span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.isDragging) <span class="cstat-no" title="statement not covered" >return;</span></span>
-        const event = <span class="cstat-no" title="statement not covered" >e as MouseEvent;</span> // Приводим к MouseEvent
+        const event = <span class="cstat-no" title="statement not covered" >e as MouseEvent;</span>
         const dx = <span class="cstat-no" title="statement not covered" >event.clientX - startX;</span>
         const dy = <span class="cstat-no" title="statement not covered" >event.clientY - startY;</span>
 <span class="cstat-no" title="statement not covered" >        this.elements.forEach(<span class="fstat-no" title="function not covered" >element </span>=&gt; {</span>
@@ -632,7 +656,7 @@ export class AnimationGroup {
         });
       }, 16);
 &nbsp;
-      const onMouseUp = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; { // Изменяем на Event</span>
+      const onMouseUp = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this.isDragging = false;</span>
 <span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (this.currentPhase !== 'exit') {</span>
 <span class="cstat-no" title="statement not covered" >          this.playPhase('exit');</span>
@@ -643,7 +667,7 @@ export class AnimationGroup {
 <span class="cstat-no" title="statement not covered" >      addListener(window, 'mousemove', onMouseMove);</span>
 <span class="cstat-no" title="statement not covered" >      addListener(window, 'mouseup', onMouseUp);</span>
     } else <span class="cstat-no" title="statement not covered" >if (this.trigger.type === 'doubleclick') {</span>
-      const onDoubleClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; { // Изменяем на Event</span>
+      const onDoubleClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (this.currentPhase !== 'enter') {</span>
 <span class="cstat-no" title="statement not covered" >          this.playPhase('enter');</span>
         } else {
@@ -655,8 +679,8 @@ export class AnimationGroup {
       const key = <span class="cstat-no" title="statement not covered" >this.trigger.key;</span>
 <span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!key) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
-      const onKeyDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; { // Изменяем на Event</span>
-        const event = <span class="cstat-no" title="statement not covered" >e as KeyboardEvent;</span> // Приводим к KeyboardEvent
+      const onKeyDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>: Event) =&gt; {</span>
+        const event = <span class="cstat-no" title="statement not covered" >e as KeyboardEvent;</span>
 <span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (event.key === key) {</span>
 <span class="cstat-no" title="statement not covered" >          if (this.currentPhase !== 'enter') {</span>
 <span class="cstat-no" title="statement not covered" >            this.playPhase('enter');</span>
@@ -743,6 +767,18 @@ export class AnimationGroup {
         }
         const animation = createAnimation(config);
         element.add(animation);
+        // Добавляем анимацию в DOM
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (element.getElement()) {
+          const animationElement = <span class="cstat-no" title="statement not covered" >document.createElementNS('http://www.w3.org/2000/svg', animation.getTagName());</span>
+<span class="cstat-no" title="statement not covered" >          animation.setElement(animationElement);</span>
+<span class="cstat-no" title="statement not covered" >          element.getElement()!.appendChild(animationElement);</span>
+<span class="cstat-no" title="statement not covered" >          animation.getAttributeNames().forEach(<span class="fstat-no" title="function not covered" >attr </span>=&gt; {</span>
+            const value = <span class="cstat-no" title="statement not covered" >animation.getAttribute(attr);</span>
+<span class="cstat-no" title="statement not covered" >            <span class="missing-if-branch" title="if path not taken" >I</span>if (value !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >              animationElement.setAttribute(attr, value);</span>
+            }
+          });
+        }
       });
     });
   }
@@ -753,8 +789,8 @@ export class AnimationGroup {
       const children = element.getChildren();
       children.forEach((child: CustomSVGElement) =&gt; {
         if (child instanceof CustomSVGElement &amp;&amp; animationTags.includes(child.getTagName())) {
-          element.removeChild(child); // Исправлено с remove на removeChild
-          releaseAnimation(child); // Используем импортированную функцию
+          element.removeChild(child);
+          releaseAnimation(child);
         }
       });
     });
@@ -793,7 +829,7 @@ export class Timeline {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-17T12:45:14.004Z
+                at 2025-05-28T06:32:40.630Z
             </div>
         <script src="prettify.js"></script>
         <script>
