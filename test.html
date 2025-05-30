@@ -29,12 +29,14 @@
   <!-- Подключаем бандл -->
   <script src="./dist/bundle.js"></script>
   <script>
-    const { SVG, Timeline } = AnimatedSVGLib;
+    const { SVG, Timeline, AnimationGroup } = AnimatedSVGLib;
 
     // Создаем SVG-контейнер
     const svg = new SVG({ width: 800, height: 800 });
     const container = document.getElementById('svgContainer');
     const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgElement.setAttribute('width', '800');
+    svgElement.setAttribute('height', '800');
     svg.setElement(svgElement);
     container.appendChild(svgElement);
 
@@ -256,10 +258,9 @@
 
     // Анимация на основе захардкоденных данных
     try {
-      // Имитация данных API (длина "цитаты")
       const data = { content: "This is a sample quote for testing animation purposes." };
-      const quoteLength = data.content.length; // Длина цитаты
-      const scaledRadius = 50 + quoteLength * 0.5; // Масштабируем радиус (50 + длина * 0.5)
+      const quoteLength = data.content.length;
+      const scaledRadius = 50 + quoteLength * 0.5;
       svg.animateChild(apiCircle, {
         attribute: 'r',
         from: 50,
@@ -267,35 +268,6 @@
         dur: '2s',
         easing: 'ease-in-out',
       });
-
-      // Опционально: Если использовать локальный JSON-файл, созд data.json с содержимым:
-      // { "content": "This is a sample quote for testing animation purposes." }
-      // И раскомментир следующий код:
-      /*
-      fetch('./data.json')
-        .then(res => res.json())
-        .then(data => {
-          const quoteLength = data.content.length;
-          const scaledRadius = 50 + quoteLength * 0.5;
-          svg.animateChild(apiCircle, {
-            attribute: 'r',
-            from: 50,
-            to: scaledRadius,
-            dur: '2s',
-            easing: 'ease-in-out',
-          });
-        })
-        .catch(err => {
-          console.error('Failed to fetch local data:', err);
-          svg.animateChild(apiCircle, {
-            attribute: 'r',
-            from: 50,
-            to: 50,
-            dur: '2s',
-            easing: 'ease-in-out',
-          });
-        });
-      */
     } catch (err) {
       console.error('Failed to process data:', err);
       svg.animateChild(apiCircle, {
@@ -311,6 +283,47 @@
     setTimeout(() => {
       svg.removeChild(rect);
     }, 5000);
+    
+    const hoverRect = svg.rect({ x: 600, y: 300, width: 60, height: 60, fill: 'teal', opacity: 0.8 });
+    svg.add(hoverRect); 
+    const hoverGroup = new AnimationGroup({
+      elements: hoverRect,
+      phases: {
+        enter: {
+          rotate: {
+            type: 'rotate',
+            from: '0 630 330',
+            to: '360 630 330',
+            dur: '2s',
+            easing: 'ease-in-out',
+          },
+          opacity: {
+            attribute: 'opacity',
+            from: 0.8,
+            to: 1,
+            dur: '1s',
+            easing: 'ease-in-out',
+          },
+        },
+        exit: {
+          rotate: {
+            type: 'rotate',
+            from: '360 630 330',
+            to: '0 630 330',
+            dur: '2s',
+            easing: 'ease-in-out',
+          },
+          opacity: {
+            attribute: 'opacity',
+            from: 1,
+            to: 0.8,
+            dur: '1s',
+            easing: 'ease-in-out',
+          },
+        },
+      },
+      trigger: { type: 'hover', target: hoverRect.getElement() },
+    });
 
     console.log('Generated SVG markup:', svg.toString());
   </script>

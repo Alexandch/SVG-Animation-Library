@@ -7,8 +7,6 @@ export default {
     transform: {
       '^.+\\.tsx?$': ['ts-jest', { useESM: true }],
     },
-    coverageDirectory: 'coverage',
-    collectCoverage: true,
-    collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/__tests__/**/*'],
     setupFilesAfterEnv: ['@testing-library/jest-dom'],
+    testPathIgnorePatterns: ['/dist/'],
   };

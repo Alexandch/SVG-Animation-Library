@@ -48,7 +48,14 @@ export class AnimationGroup {
     if (!this.trigger) return;
 
     const targets = this.elements.map(element => element.getElement());
-    const defaultTarget = this.trigger.target ? document.querySelector(this.trigger.target) : targets[0];
+    let defaultTarget: EventTarget | null = null;
+
+    // Проверяем, является ли target строкой (селектором) или элементом
+    if (typeof this.trigger.target === 'string') {
+      defaultTarget = document.querySelector(this.trigger.target);
+    } else {
+      defaultTarget = this.trigger.target || targets[0];
+    }
 
     if (!defaultTarget) {
       console.error('Trigger target not found');
@@ -145,24 +152,27 @@ export class AnimationGroup {
         observer.observe(target);
       }
     } else if (this.trigger.type === 'click') {
-      defaultTarget.addEventListener('click', () => {
+      const onClick = () => {
         if (this.currentPhase !== 'enter') {
           this.playPhase('enter');
         } else {
           this.playPhase('exit');
         }
-      });
+      };
+      addListener(defaultTarget, 'click', onClick);
     } else if (this.trigger.type === 'hover') {
-      defaultTarget.addEventListener('mouseenter', () => {
+      const onMouseEnter = () => {
         if (this.currentPhase !== 'enter') {
           this.playPhase('enter');
         }
-      });
-      defaultTarget.addEventListener('mouseleave', () => {
+      };
+      const onMouseLeave = () => {
         if (this.currentPhase !== 'exit') {
           this.playPhase('exit');
         }
-      });
+      };
+      addListener(defaultTarget, 'mouseenter', onMouseEnter);
+      addListener(defaultTarget, 'mouseleave', onMouseLeave);
     } else if (this.trigger.type === 'timer') {
       const delay = this.trigger.delay ?? 1000;
       setTimeout(() => {
@@ -174,13 +184,14 @@ export class AnimationGroup {
       const event = this.trigger.event;
       if (!event) return;
 
-      defaultTarget.addEventListener(event, () => {
+      const onCustomEvent = () => {
         if (this.currentPhase !== 'enter') {
           this.playPhase('enter');
         } else {
           this.playPhase('exit');
         }
-      });
+      };
+      addListener(defaultTarget, event, onCustomEvent);
     }
   }
 
@@ -196,7 +207,6 @@ export class AnimationGroup {
         }
         const animation = createAnimation(config);
         element.add(animation);
-        // Добавляем анимацию в DOM
         if (element.getElement()) {
           const animationElement = document.createElementNS('http://www.w3.org/2000/svg', animation.getTagName());
           animation.setElement(animationElement);

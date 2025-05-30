@@ -9,6 +9,7 @@ interface BaseAnimationOptions {
   begin?: string;
   easing?: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out' | string;
   keyframes?: Keyframe[];
+  fill?: string;
 }
 
 export interface AnimationOptions extends BaseAnimationOptions {
@@ -18,6 +19,8 @@ export interface AnimationOptions extends BaseAnimationOptions {
 
 export interface TransformAnimationOptions extends BaseAnimationOptions {
   type: 'rotate' | 'scale' | 'translate' | 'skewX' | 'skewY';
+  from: string | number; 
+  to: string | number;   
 }
 
 export interface GradientAnimationOptions extends BaseAnimationOptions {

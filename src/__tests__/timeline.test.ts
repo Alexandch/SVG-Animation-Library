@@ -1,4 +1,6 @@
+import { releaseAnimation } from '../animations';
 import { SVG, SVGElement } from '../index';
+import { CustomSVGElement } from '../svg-element';
 import { AnimationGroup, Timeline } from '../timeline';
 
 describe('Timeline', () => {
@@ -16,7 +18,7 @@ describe('Timeline', () => {
       phases: {
         enter: {
           r: {
-            attribute: 'r', // Указываем корректное значение
+            attribute: 'r', 
             from: '20',
             to: '40',
             dur: '1s',
@@ -40,7 +42,7 @@ describe('Timeline', () => {
       phases: {
         enter: {
           r: {
-            attribute: 'r', // Указываем корректное значение
+            attribute: 'r', 
             from: '20',
             to: '40',
             dur: '1s',
@@ -54,7 +56,7 @@ describe('Timeline', () => {
       phases: {
         exit: {
           r: {
-            attribute: 'r', // Указываем корректное значение
+            attribute: 'r', 
             from: '40',
             to: '20',
             dur: '1s',
@@ -82,7 +84,7 @@ describe('Timeline', () => {
       phases: {
         enter: {
           r: {
-            attribute: 'r', // Указываем корректное значение
+            attribute: 'r', 
             from: '20',
             to: '40',
             dur: '1s',
@@ -93,6 +95,27 @@ describe('Timeline', () => {
 
     timeline.stopAll();
 
+    const markup = svg.toString();
+    expect(markup).not.toContain('attributeName="r"');
+  });
+
+  test('destroys Timeline and removes all groups', () => {
+    const timeline = new Timeline();
+    timeline.addGroup({
+      elements: [circle],
+      phases: {
+        enter: {
+          r: {
+            attribute: 'r',
+            from: '20',
+            to: '40',
+            dur: '1s',
+          },
+        },
+      },
+    });
+
+    timeline.destroy();
     const markup = svg.toString();
     expect(markup).not.toContain('attributeName="r"');
   });

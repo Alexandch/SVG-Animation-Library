@@ -83,4 +83,23 @@ describe('Timeline', () => {
         const markup = svg.toString();
         expect(markup).not.toContain('attributeName="r"');
     });
+    test('destroys Timeline and removes all groups', () => {
+        const timeline = new Timeline();
+        timeline.addGroup({
+            elements: [circle],
+            phases: {
+                enter: {
+                    r: {
+                        attribute: 'r',
+                        from: '20',
+                        to: '40',
+                        dur: '1s',
+                    },
+                },
+            },
+        });
+        timeline.destroy();
+        const markup = svg.toString();
+        expect(markup).not.toContain('attributeName="r"');
+    });
 });

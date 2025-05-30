@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { SVG } from './svg'; 
 import { SVGElement } from './elements';
-import { AnimationOptions } from './types';
+import { AnimationConfig } from './types'; // Импортируем AnimationConfig вместо AnimationOptions
 
 export function useSvgAnimation(ref: React.RefObject<SVGSVGElement>, options: {
   width: number;
@@ -9,7 +9,7 @@ export function useSvgAnimation(ref: React.RefObject<SVGSVGElement>, options: {
   elements: Array<{
     type: 'circle' | 'rect' | 'line' | 'path';
     attributes: Record<string, string | number>;
-    animations?: AnimationOptions[];
+    animations?: AnimationConfig[]; // Изменяем на AnimationConfig[]
   }>;
 }) {
   const svgRef = useRef<SVG | null>(null);
